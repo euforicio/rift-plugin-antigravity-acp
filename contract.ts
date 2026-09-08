@@ -1,5 +1,5 @@
 // Typed host RPC shared by server.ts (caller) and host.ts (implementation).
-import { defineRpcContract } from "@get-bb/plugin-sdk";
+import { defineRpcContract } from "@riftlabs/plugin-sdk";
 import { z } from "zod";
 
 export const agyHostContract = defineRpcContract({

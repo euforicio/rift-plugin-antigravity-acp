@@ -1,19 +1,19 @@
-# bb-plugin-google-antigravity-acp
+# rift-plugin-google-antigravity-acp
 
-Google Antigravity as a first-class bb agent provider through Antigravity's
+Google Antigravity as a first-class rift agent provider through Antigravity's
 official **ACP** server (`agy_acp_server.par`).
 
-Registers the `acp-antigravity` provider (family `acp`), exactly like bb's
+Registers the `acp-antigravity` provider (family `acp`), exactly like rift's
 builtin ACP agents:
 
-- `server.ts` — `bb.providers.register` with the launch spec in
+- `server.ts` — `rift.providers.register` with the launch spec in
   `experimental_bridgeOptions.acpLaunchSpec`; plugin settings for install
-  paths; the `bb google-antigravity-acp status` and
-  `bb google-antigravity-acp install` commands.
+  paths; the `rift google-antigravity-acp status` and
+  `rift google-antigravity-acp install` commands.
 - `host.ts` — re-exports the canonical ACP provider bridge
-  (`@get-bb/plugin-sdk/provider-bridge/acp`, the same bridge the builtin
+  (`@riftlabs/plugin-sdk/provider-bridge/acp`, the same bridge the builtin
   `provider-acp` plugin uses) and implements the host RPC the install/status
-  commands call, so installs run on the target machine, not on the bb server.
+  commands call, so installs run on the target machine, not on the rift server.
 - `install.ts` — shared install logic: resolves the official distribution
   from the ACP registry (pinned to a commit SHA), downloads, safely extracts,
   and links the server binary and sandbox helper onto PATH (no environment
@@ -23,14 +23,14 @@ builtin ACP agents:
 ## Install the plugin
 
 ```sh
-bb plugin install .                  # from this directory
-bb plugin reload google-antigravity-acp
+rift plugin install .                  # from this directory
+rift plugin reload google-antigravity-acp
 ```
 
 ## Install the server binary
 
 ```sh
-bb google-antigravity-acp install
+rift google-antigravity-acp install
 ```
 
 The command runs on the machine that will launch the agent (the current
@@ -59,8 +59,8 @@ links both into `binDir`), so no per-machine environment variables are
 needed.
 
 ```sh
-bb google-antigravity-acp install --machine macbook        # this machine
-bb google-antigravity-acp install --machine other-host     # another enrolled machine
+rift google-antigravity-acp install --machine macbook        # this machine
+rift google-antigravity-acp install --machine other-host     # another enrolled machine
 ```
 
 The machine's daemon shell must have `binDir` on PATH. The command warns
@@ -69,11 +69,11 @@ when it is not; pick a dir that is (e.g. `/usr/local/bin`) with `--bin-dir`.
 Useful flags:
 
 ```sh
-bb google-antigravity-acp install --machine macbook        # install on a specific machine
-bb google-antigravity-acp install --force                  # re-download even if already installed
-bb google-antigravity-acp install --from ./agy-acp.zip     # explicit source (URL or local file)
-bb google-antigravity-acp install --update-path            # also append binDir to the user PATH (Windows)
-bb google-antigravity-acp install --json                   # machine-readable output
+rift google-antigravity-acp install --machine macbook        # install on a specific machine
+rift google-antigravity-acp install --force                  # re-download even if already installed
+rift google-antigravity-acp install --from ./agy-acp.zip     # explicit source (URL or local file)
+rift google-antigravity-acp install --update-path            # also append binDir to the user PATH (Windows)
+rift google-antigravity-acp install --json                   # machine-readable output
 ```
 
 `~/.local/bin` must be on the machine's PATH for the provider health probe to
@@ -82,10 +82,10 @@ find the server. The command warns when it is not.
 ## Verify
 
 ```sh
-bb google-antigravity-acp status        # where the server is, per machine
-bb provider list                        # acp-antigravity appears (visibility: installed)
-bb provider models acp-antigravity
-bb thread spawn --provider acp-antigravity --prompt 'hi'
+rift google-antigravity-acp status        # where the server is, per machine
+rift provider list                        # acp-antigravity appears (visibility: installed)
+rift provider models acp-antigravity
+rift thread spawn --provider acp-antigravity --prompt 'hi'
 ```
 
 ## Security notes
@@ -105,3 +105,17 @@ bb thread spawn --provider acp-antigravity --prompt 'hi'
 Auth is handled in-band by the ACP server (Google account OAuth, Gemini API
 key, Agent Platform). First run surfaces a login flow in the thread. State
 lives under `~/.gemini/antigravity-acp/settings.json`.
+
+## Development
+
+Maintained for Rift by Rift Labs ([riftlabs.app](https://riftlabs.app)).
+Original upstream authorship and MIT licensing are preserved.
+
+With Node 22, run `node tooling/check-vendor.mjs`, `npm ci --ignore-scripts`,
+`npm run typecheck`, and `npm run build`. The builder is actual Rift 0.42.1
+build code, with its source ref, checksum, and license in `tooling/vendor`.
+SDK archive provenance is in `vendor/README.md`. The SDK stays a production
+dependency because the host imports its ACP bridge and host runtime.
+There is no upstream automated test suite or frontend entry. Building and
+loading the host do not establish authenticated Antigravity runtime acceptance;
+use the Verify commands above on a machine with the official binary and auth.

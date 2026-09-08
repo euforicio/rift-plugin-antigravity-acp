@@ -318,7 +318,7 @@ async function appendUserPathWindows(binDir: string, updatePath: boolean, notes:
       return;
     }
     await execFileAsync("setx", ["Path", next], { windowsHide: true });
-    notes.push(`Added ${binDir} to the user PATH (setx). Restart the bb daemon so it takes effect.`);
+    notes.push(`Added ${binDir} to the user PATH (setx). Restart the rift daemon so it takes effect.`);
   } catch (err) {
     notes.push(`Could not update the user PATH: ${(err as Error).message}. Add ${binDir} to PATH manually.`);
   }
@@ -489,6 +489,6 @@ export async function probeLocal(): Promise<ProbeResult> {
     arch: target.arch,
     binaryPath,
     harnessPath,
-    error: binaryPath ? null : `\`${binaryName}\` was not found on PATH. Install it with \`bb google-antigravity-acp install\`.`,
+    error: binaryPath ? null : `\`${binaryName}\` was not found on PATH. Install it with \`rift google-antigravity-acp install\`.`,
   };
 }

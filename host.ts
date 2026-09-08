@@ -1,18 +1,18 @@
-// bb-plugin-google-antigravity-acp host entry.
+// rift-plugin-google-antigravity-acp host entry.
 //
-// Ships bb's canonical ACP provider bridge (@get-bb/plugin-sdk/
+// Ships rift's canonical ACP provider bridge (@riftlabs/plugin-sdk/
 // provider-bridge/acp — the same bridge the builtin provider-acp plugin
 // uses). The runtime spawns this artifact as the provider bridge; per-agent
 // launch facts arrive in `options.providerOptions.acpLaunchSpec` from the
 // server-side registration in server.ts.
 //
-// The same artifact also implements the plugin's host RPC (`bb
+// The same artifact also implements the plugin's host RPC (`rift
 // google-antigravity-acp install` / `status`), so installs run on the machine
-// where the daemon executes instead of on the bb server.
+// where the daemon executes instead of on the rift server.
 import {
   experimental_acpProviderBridge as experimental_providerBridge,
-} from "@get-bb/plugin-sdk/provider-bridge/acp";
-import { experimental_defineHostEntry } from "@get-bb/plugin-sdk/host";
+} from "@riftlabs/plugin-sdk/provider-bridge/acp";
+import { experimental_defineHostEntry } from "@riftlabs/plugin-sdk/host";
 import { agyHostContract } from "./contract.js";
 import { probeLocal, runInstall } from "./install.js";
 

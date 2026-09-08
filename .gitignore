@@ -5,3 +5,6 @@ node_modules/
 # global "Icon?" pattern matches the icons/ dir name
 !icons/
 !icons/**
+
+# Local builder toolchain cache
+toolchain-*/
